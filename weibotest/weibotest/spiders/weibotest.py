@@ -5,21 +5,20 @@ import json
 from scrapy.spiders import Spider
 import sys
 class WeiboSpider(Spider):
-
-	name = 'weibospider'
+	name = 'weibo'
 	allowded_domains =['weibo.com']
 	def start_requests(self):
 		url = 'https://m.weibo.cn/p/1005052803301701'
 		head1 = 'https://m.weibo.cn/api/container/getIndex?containerid='
 		url = head1 + url.replace('https://m.weibo.cn/p/','').replace('100505','107603')
-		global url
 		yield Request(url)
 	def parse(self,response):
 		content = json.loads(response.body)
 		weibo_info =content.get('cards',[])
-		i =0
 		fo = open('test.log','w')
 		sys.stdout = fo
+		rawurl = response.url
+		print rawurl
 		for info in weibo_info:
 			print '========',i,'========='
 			i = i+1
@@ -41,7 +40,8 @@ class WeiboSpider(Spider):
 			print secondurl
 			print time_recond
 			print picture_urls
-			global j
-			j=2
-			j= j+1
-		yield Request(url+)
+			if rawurl.replace('https://m.weibo.cn/api/container/getIndex?containerid=1076032803301701',''):
+				continue
+			j = i+1
+			nexturl =rawurl+'&page='+'%d'%j
+			yield Request(nexturl)
