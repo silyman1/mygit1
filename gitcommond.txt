@@ -1,0 +1,48 @@
+mkdir
+pwd
+cd
+ls
+rm
+工作区-——暂存区——分支
+git config --global user.name "pzc"
+git config --global user.email "pzc@qq.com"
+git init 
+git add aaa.txt（多次）
+git commit -m "注释说明"
+git status
+git diff aaa.txt
+git log （--pretty=oneline）
+git reset --hard HEAD^或者具体版本号不用写全
+git reflog
+git checkout -- file         git checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
+git reset HEAD file
+那就用命令git rm删掉，并且git commit
+
+
+Git支持多种协议，默认的git://使用ssh，但也可以使用https等其他协议。
+git remote add origin git@github.com:silyman1/mygit1.git
+
+git push -u origin master
+git push origin master
+git clone https://github.com/silyman1/meimei
+
+
+git checkout -b dev
+git checkout命令加上-b参数表示创建并切换，相当于以下两条命令：
+
+$ git branch dev
+$ git checkout dev
+Switched to branch 'dev'
+
+ git checkout master
+
+git merge dev
+
+git branch -d dev
+
+git commit -m "conflict fixed"
+
+
+git merge --no-ff -m "merge with no-ff" dev
+
+合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并。
