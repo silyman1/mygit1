@@ -13,7 +13,25 @@ BOT_NAME = 'scrapyspider'
 
 SPIDER_MODULES = ['scrapyspider.spiders']
 NEWSPIDER_MODULE = 'scrapyspider.spiders'
+FEED_EXPORTERS = {
+    'csv': 'scrapyspider.csv_order.MyProjectCsvItemExporter',
+} #这里假设你的project名字为scrapyspider
+FIELDS_TO_EXPORT = [
+    'store_name',
+    'store_location',
+    'goods_name',
+    'price',
+	'sales',
+	'reviews',
+	'star_rating',
+	'store_rating',
+	'decribe_score',
+	'attitude_score',
+	'logistics_score'
+]
 
+
+#CSV_DELIMITER = "\t"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'scrapyspider (+http://www.yourdomain.com)'

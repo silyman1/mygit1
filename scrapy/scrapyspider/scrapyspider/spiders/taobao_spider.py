@@ -26,20 +26,20 @@ class TaobaoTshirt_Spider(Spider):
 			pattern = re.compile('"raw_title":"(.*?)",.*?"view_price":"(.*?)",.*?"item_loc":"(.*?)","view_sales":"(.*?)",.*?"nick":"(.*?)",',re.S)
 			contents = re.findall(pattern,str(datas))
 			for content in contents:
-				import chardet
-				fencoding=chardet.detect(content[4])
-				print fencoding
-				print content[4].decode('ascii')
-				print content[2]
-				print content[0].encode('utf-8')
-				print content[1].decode('utf-8')
-				print content[3].decode('utf-8')
+				#import chardet
+				#fencoding=chardet.detect(content[4])
+				#print fencoding
+				print content[4].decode("unicode_escape").encode('utf-8')
+				print content[2].decode("unicode_escape").encode('utf-8')
+				print content[0].decode("unicode_escape").encode('utf-8')
+				print content[1].decode("unicode_escape").encode('utf-8')
+				print content[3].decode("unicode_escape").encode('utf-8')
 				print '============================='
-				item['store_name'] =content[4].encode('utf-8')
-				item['store_location'] =content[2].encode('utf-8')
-				item['goods_name'] =content[0].encode('utf-8')
-				item['price'] =content[1].encode('utf-8')
-				item['sales'] =content[3].encode('utf-8')
+				item['store_name'] =content[4].decode("unicode_escape").encode('utf-8')
+				item['store_location'] =content[2].decode("unicode_escape").encode('utf-8')
+				item['goods_name'] =content[0].decode("unicode_escape").encode('utf-8')
+				item['price'] =content[1].decode("unicode_escape").encode('utf-8')
+				item['sales'] =content[3].decode("unicode_escape").encode('utf-8')
 				yield item
 
 
