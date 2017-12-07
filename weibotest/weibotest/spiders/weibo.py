@@ -4,6 +4,7 @@ from scrapy import Request
 import json
 from scrapy.spiders import Spider
 import sys
+from weibotest.items import WeiboItem
 class WeiboSpider(Spider):
 	name = 'weibo'
 	allowded_domains =['weibo.com']
@@ -13,19 +14,21 @@ class WeiboSpider(Spider):
 		url = head1 + url.replace('https://m.weibo.cn/p/','').replace('100505','107603')
 		yield Request(url)
 	def parse(self,response):
+		item = WeiboItem()
 		content = json.loads(response.body)
 		weibo_info =content.get('cards',[])
 		fo = open('test.log','w')
 		sys.stdout = fo
 		rawurl = response.url
 		print rawurl
+		i =1
 		for info in weibo_info:
 			print '========',i,'========='
 			i = i+1
 			if info.get('mblog') and info.get('mblog').get('text'):
 				title = info.get('mblog').get('text').encode('utf-8')
 				secondurl = "https://m.weibo.cn/status/%s" % info["mblog"]["mid"]
-				time_recond = info.get('mblog')['created_at'].encode('utf-8')
+				time_record = info.get('mblog')['created_at'].encode('utf-8')
 				picture_urls = ''
 				if info.get('mblog').get('page_info'):
 					if info.get('mblog').get('page_info').get('media_info'):
@@ -37,9 +40,13 @@ class WeiboSpider(Spider):
 						picture_urls = ','.join(pics)
 			print '++++++++++'
 			print title
+			item['title'] = title
 			print secondurl
-			print time_recond
+			item['reviewurl'] = secondurl
+			print time_record
+			item['time_record'] = time_record
 			print picture_urls
+			yield item
 			if rawurl.replace('https://m.weibo.cn/api/container/getIndex?containerid=1076032803301701',''):
 				continue
 			j = i+1
