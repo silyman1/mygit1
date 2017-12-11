@@ -4,8 +4,12 @@ from scrapy.spiders import Spider
 from scrapyspider.items import TaobaoItem
 import re
 import sys
+import time
+reload(sys)
+sys.setdefaultencoding('utf8')
+from selenium import webdriver
 
-
+import chardet
 class TaobaoTshirt_Spider(Spider):
 	name ='taobao1'
 	headers = {
@@ -23,23 +27,38 @@ class TaobaoTshirt_Spider(Spider):
 		datas = response.xpath('//script/text()').extract() 
 		item = TaobaoItem()
 		if datas:
-			pattern = re.compile('"raw_title":"(.*?)",.*?"view_price":"(.*?)",.*?"item_loc":"(.*?)","view_sales":"(.*?)",.*?"nick":"(.*?)",',re.S)
+			pattern = re.compile('"raw_title":"(.*?)",.*?"detail_url":"(.*?)",.*?"view_price":"(.*?)",.*?"item_loc":"(.*?)","view_sales":"(.*?)",.*?"nick":"(.*?)",',re.S)
 			contents = re.findall(pattern,str(datas))
 			for content in contents:
 				#import chardet
 				#fencoding=chardet.detect(content[4])
 				#print fencoding
-				print content[4].decode("unicode_escape").encode('utf-8')
-				print content[2].decode("unicode_escape").encode('utf-8')
-				print content[0].decode("unicode_escape").encode('utf-8')
-				print content[1].decode("unicode_escape").encode('utf-8')
+				print content[5].decode("unicode_escape").encode('utf-8')
 				print content[3].decode("unicode_escape").encode('utf-8')
+				print content[0].decode("unicode_escape").encode('utf-8')
+				print content[2].decode("unicode_escape").encode('utf-8')
+				print content[4].decode("unicode_escape").encode('utf-8')
+				print content[1]
 				print '============================='
-				item['store_name'] =content[4].decode("unicode_escape").encode('utf-8')
-				item['store_location'] =content[2].decode("unicode_escape").encode('utf-8')
+				detail_url = 'https:'+ content[1].decode('unicode_escape').decode("unicode_escape").encode('utf-8')
+				print detail_url
+				browser = webdriver.PhantomJS()#PhantomJS
+				browser.get(detail_url)
+				time.sleep(2)
+				print '=================================6666666666!!!!'
+				#results = browser.find_elements_by_xpath("//span[@class='tm-count']")
+				#ime.sleep(1)
+				#print u'month_sales:',results[0].text
+				#print u'review_num:',results[1].text
+				browser.quit()
+				#item['month_sales'] = results[0].text
+				#item['reviews'] = results[1].text
+				item['store_name'] =content[5].decode("unicode_escape").encode('utf-8')
+				item['store_location'] =content[3].decode("unicode_escape").encode('utf-8')
 				item['goods_name'] =content[0].decode("unicode_escape").encode('utf-8')
-				item['price'] =content[1].decode("unicode_escape").encode('utf-8')
-				item['sales'] =content[3].decode("unicode_escape").encode('utf-8')
+				item['price'] =content[2].decode("unicode_escape").encode('utf-8')
+				item['sales'] =content[4].decode("unicode_escape").encode('utf-8')
+				
 				yield item
 
 

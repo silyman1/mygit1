@@ -42,6 +42,8 @@ class TaobaoItem(scrapy.Item):
 	price = scrapy.Field()
 	#销量@
 	sales = scrapy.Field()
+	#月销量@
+	month_sales = scrapy.Field()
 	#评论数
 	reviews = scrapy.Field()
 	#评价星级

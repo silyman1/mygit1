@@ -22,6 +22,7 @@ FIELDS_TO_EXPORT = [
     'goods_name',
     'price',
 	'sales',
+	'month_sales',
 	'reviews',
 	'star_rating',
 	'store_rating',
