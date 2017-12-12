@@ -11,28 +11,17 @@ sys.setdefaultencoding('utf8')
 
 browser = webdriver.Chrome()
 #browser=webdriver.PhantomJS(service_args=['--ssl-protocol=any'])#PhantomJS
-browser.get('https://detail.tmall.com/item.htm?spm=a230r.1.14.5.5144467egnPC4G&id=557649706137&ns=1&abbucket=20')
-time.sleep(3)
-browser.save_screenshot('E:\\mygit1\\scrapy\\scrapyspider\\1123.png')
-#try:
-	#results = browser.find_elements_by_xpath("//span[@class='tm-count']")
-	#print u'month_sales:',results[0].text
-	#print u'review_num:',results[1].text
-
-#except:
-	#ults = browser.find_elements_by_xpath("//em[@class='J_ReviewsCount']")
-	#print u'未知月销量'
-	#print u'review_num:',results[0].text
-
-#else:
-	#print u'ok=====go on '
-
-score_urls = browser.find_elements_by_xpath('//*[@class="main-info"]/a')
-
-for score_url in score_urls:
-	print score_url.get_attribute("href")
-#print browser.page_source
-#for score_url in score_urls:
-	#print score_url.find_element_by_xpath("//a").get_attribute("href")
+browser.get('//rate.taobao.com/user-rate-95cf5ce4398a3bd471b08cbe9bf6e0fb.htm?spm=2013.1.1000126.10.68ab26c2ws4Vvj')
+#browser=webdriver.PhantomJS(service_args=['--ssl-protocol=any'])#PhantomJS
+#browser.get(url)
+time.sleep(5)
+decribe_score = browser.find_element_by_xpath('//*[@id="dsr"]/li[1]/div[1]/em[1]')
+print 'decribe_score:',decribe_score
+attitude_score = browser.find_element_by_xpath('//*[@id="dsr"]/li[2]/div[1]/em[1]')
+print 'attitude_score:',attitude_score
+logistics_score = browser.find_element_by_xpath('//*[@id="dsr"]/li[3]/div[1]/em[1]')
+print 'logistics_score:',logistics_score
+store_rating = browser.find_element_by_xpath('//*[@id="dsr"]/li[2]/div[2]/div/div[1]/em')
+print 'store_rating:',store_rating
 browser.quit()
 

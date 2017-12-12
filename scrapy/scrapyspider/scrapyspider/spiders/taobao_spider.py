@@ -23,20 +23,16 @@ class TaobaoTshirt_Spider(Spider):
 		print '+++++++++'
 		url = self.url+str(self.num)
 		self.num += 44
-		yield Request(url,headers =self.headers)
-	def parse(self,response):
 		fo = open('test.log','w')
 		sys.stdout = fo
+		print url
+		yield Request(url,headers =self.headers)
+	def parse(self,response):
 		print '============================='
 		datas = response.xpath('//script/text()').extract() 
-		a = self.get_details(datas)
-		if self.count < 200:
-			url = self.url+str(self.num)
-			self.num += 44
-			yield Request(url,headers =self.headers)
-		#item = TaobaoItem()
-	def get_details(self,datas)
+		print '???'
 		if datas:
+			print '=============================beginning'
 			pattern = re.compile('"raw_title":"(.*?)",.*?"detail_url":"(.*?)",.*?"view_price":"(.*?)",.*?"item_loc":"(.*?)","view_sales":"(.*?)",.*?"nick":"(.*?)",',re.S)
 			contents = re.findall(pattern,str(datas))
 			for content in contents:
@@ -48,11 +44,10 @@ class TaobaoTshirt_Spider(Spider):
 				print content[0].decode("unicode_escape").encode('utf-8')
 				print content[2].decode("unicode_escape").encode('utf-8')
 				print content[4].decode("unicode_escape").encode('utf-8')
-				print content[1]
 				print '============================='
 				detail_url = 'https:'+ content[1].decode('unicode_escape').decode("unicode_escape").encode('utf-8')
 				print detail_url
-				self.get_details(detail_url)
+				self.get_nextdetails(detail_url)
 				self.item['store_name'] =content[5].decode("unicode_escape").encode('utf-8')
 				self.item['store_location'] =content[3].decode("unicode_escape").encode('utf-8')
 				self.item['goods_name'] =content[0].decode("unicode_escape").encode('utf-8')
@@ -64,10 +59,16 @@ class TaobaoTshirt_Spider(Spider):
 					yield self.item
 				else:
 					break
+		if self.count < 200:
+			url = self.url+str(self.num)
+			self.num += 44
+			yield Request(url,headers =self.headers)
+		#item = TaobaoItem()
 	def get_nextdetails(self,url):
-		browser=webdriver.PhantomJS(service_args=['--ssl-protocol=any'])#PhantomJS
+		#browser=webdriver.PhantomJS(service_args=['--ssl-protocol=any'])#PhantomJS
+		browser=webdriver.Chrome()
 		browser.get(url)
-		time.sleep(3)
+		time.sleep(8)
 
 		print '=================================6666666666!!!!'
 		try:
@@ -83,11 +84,51 @@ class TaobaoTshirt_Spider(Spider):
 			print u'review_num:',results[0].text
 			self.item['month_sales'] = u'未知'
 			self.item['reviews'] = results[0].text
+			
 		else:
 			print u'ok=====go on '
-		score_urls = browser.find_elements_by_xpath('//*[@class="main-info"]/a')
-		print score_url[1].get_attribute("href")
+			
+		scores = browser.find_elements_by_xpath('//*[@class="shopdsr-score-con"]')
+		if scores:
+			decribe_score = scores[0]
+			print 'decribe_score:',decribe_score.text
+			attitude_score = scores[1]
+			print 'attitude_score:',attitude_score.text
+			logistics_score = scores[2]
+			print 'logistics_score:',logistics_score.text
+			print 'tianmao'
+		else:
+			print 'cvb'
+			scores = browser.find_elements_by_xpath('//*[@class="tb-shop-rate"]//a')
+			if scores:
+				decribe_score = scores[0]
+				print 'decribe_score:',decribe_score.text
+				attitude_score = scores[1]
+				print 'attitude_score:',attitude_score.text
+				logistics_score = scores[2]
+				print 'logistics_score:',logistics_score.text
+				print 'taobao1'
+			else:
+				scores = browser.find_elements_by_xpath('//*[@class="rateinfo"]//em')
+				decribe_score = scores[0]
+				print 'decribe_score:',decribe_score.text
+				attitude_score = scores[1]
+				print 'attitude_score:',attitude_score.text
+				logistics_score = scores[2]
+				print 'logistics_score:',logistics_score.text
+				print 'taobao1'
+		print u'ok=====go on############### '
+		self.item['decribe_score'] = decribe_score
+		self.item['attitude_score'] = attitude_score
+		self.item['logistics_score'] = logistics_score
+		#score_urls = browser.find_element_by_xpath('//*[@class="main-info"]//a')
+		#if score_urls:
+		#	print score_urls.get_attribute("href")
+		#else:
+		#	score_urls = browser.find_elements_by_xpath('//*[@class="tb-shop-rate"]//a')
+		#	print score_urls[0].get_attribute("href")
 		browser.quit()
+	
 		
 		
 
