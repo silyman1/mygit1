@@ -9,7 +9,6 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 from selenium import webdriver
 
-import chardet
 class TaobaoTshirt_Spider(Spider):
 	count = 0
 	name ='taobao1'
@@ -20,7 +19,6 @@ class TaobaoTshirt_Spider(Spider):
 	}
 	item = TaobaoItem()
 	def start_requests(self):
-		print '+++++++++'
 		url = self.url+str(self.num)
 		self.num += 44
 		fo = open('test.log','w')
@@ -30,7 +28,6 @@ class TaobaoTshirt_Spider(Spider):
 	def parse(self,response):
 		print '============================='
 		datas = response.xpath('//script/text()').extract() 
-		print '???'
 		if datas:
 			print '=============================beginning'
 			pattern = re.compile('"raw_title":"(.*?)",.*?"detail_url":"(.*?)",.*?"view_price":"(.*?)",.*?"item_loc":"(.*?)","view_sales":"(.*?)",.*?"nick":"(.*?)",',re.S)
@@ -55,8 +52,9 @@ class TaobaoTshirt_Spider(Spider):
 				self.item['sales'] =content[4].decode("unicode_escape").encode('utf-8')
 				self.count += 1
 				print self.count
-				if self.count <=200:
+				if self.count <200:
 					yield self.item
+					time.sleep(1)
 				else:
 					break
 		if self.count < 200:
@@ -65,11 +63,19 @@ class TaobaoTshirt_Spider(Spider):
 			yield Request(url,headers =self.headers)
 		#item = TaobaoItem()
 	def get_nextdetails(self,url):
-		#browser=webdriver.PhantomJS(service_args=['--ssl-protocol=any'])#PhantomJS
-		browser=webdriver.Chrome()
+		service_args=[]
+		service_args.append('--load-images=no')  ##关闭图片加载
+		service_args.append('--disk-cache=yes')  ##开启缓存
+		service_args.append('--ignore-ssl-errors=true') ##忽略https错误
+		service_args.append('--ssl-protocol=any')
+		browser=webdriver.PhantomJS(service_args=service_args)#PhantomJS
+		#chrome_options = webdriver.ChromeOptions()
+		#prefs = {"profile.managed_default_content_settings.images":2}
+		#chrome_options.add_experimental_option("prefs",prefs)
+		#browser = webdriver.Chrome(chrome_options=chrome_options)
 		browser.get(url)
-		time.sleep(8)
-
+		time.sleep(3)
+		#browser.save_screenshot('E:\\mygit1\\scrapy\\scrapyspider\\1123.png')
 		print '=================================6666666666!!!!'
 		try:
 			results = browser.find_elements_by_xpath("//span[@class='tm-count']")
@@ -82,7 +88,7 @@ class TaobaoTshirt_Spider(Spider):
 			results = browser.find_elements_by_xpath("//em[@class='J_ReviewsCount']")
 			print u'未知月销量'
 			print u'review_num:',results[0].text
-			self.item['month_sales'] = u'未知'
+			self.item['month_sales'] = u'   未知'
 			self.item['reviews'] = results[0].text
 			
 		else:
@@ -98,7 +104,6 @@ class TaobaoTshirt_Spider(Spider):
 			print 'logistics_score:',logistics_score.text
 			print 'tianmao'
 		else:
-			print 'cvb'
 			scores = browser.find_elements_by_xpath('//*[@class="tb-shop-rate"]//a')
 			if scores:
 				decribe_score = scores[0]
@@ -116,11 +121,11 @@ class TaobaoTshirt_Spider(Spider):
 				print 'attitude_score:',attitude_score.text
 				logistics_score = scores[2]
 				print 'logistics_score:',logistics_score.text
-				print 'taobao1'
+				print 'taobao2'
 		print u'ok=====go on############### '
-		self.item['decribe_score'] = decribe_score
-		self.item['attitude_score'] = attitude_score
-		self.item['logistics_score'] = logistics_score
+		self.item['decribe_score'] = decribe_score.text
+		self.item['attitude_score'] = attitude_score.text
+		self.item['logistics_score'] = logistics_score.text
 		#score_urls = browser.find_element_by_xpath('//*[@class="main-info"]//a')
 		#if score_urls:
 		#	print score_urls.get_attribute("href")
