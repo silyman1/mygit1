@@ -1,12 +1,12 @@
 PhantomJS is launching GhostDriver...
-[INFO  - 2017-12-13T03:10:31.767Z] GhostDriver - Main - running on port 2410
-[INFO  - 2017-12-13T03:10:31.846Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - _decorateNewWindow - page.settings: {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.2 Safari/534.34","webSecurityEnabled":true}
-[INFO  - 2017-12-13T03:10:31.846Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - page.customHeaders:  - {}
-[INFO  - 2017-12-13T03:10:31.846Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - CONSTRUCTOR - Desired Capabilities: {"platform":"ANY","browserName":"phantomjs","version":"","javascriptEnabled":true}
-[INFO  - 2017-12-13T03:10:31.846Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - CONSTRUCTOR - Negotiated Capabilities: {"browserName":"phantomjs","version":"1.9.2","driverName":"ghostdriver","driverVersion":"1.0.4","platform":"windows-XP-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2017-12-13T03:10:31.846Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 2dc95a00-dfb3-11e7-8917-6b42fecde6e3
-[ERROR - 2017-12-13T03:10:32.263Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - Page at 'https://item.taobao.com/item.htm?id=539867489371&ns=1&abbucket=0#detail' - Console Error (msg): TypeError: 'undefined' is not a function (evaluating 'f.bind(null,n)')
-[ERROR - 2017-12-13T03:10:32.263Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - Page at 'https://item.taobao.com/item.htm?id=539867489371&ns=1&abbucket=0#detail' - Console Error (stack): [
+[INFO  - 2017-12-13T03:43:14.948Z] GhostDriver - Main - running on port 1584
+[INFO  - 2017-12-13T03:43:14.981Z] Session [bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a] - _decorateNewWindow - page.settings: {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":false,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.2 Safari/534.34","webSecurityEnabled":true}
+[INFO  - 2017-12-13T03:43:14.981Z] Session [bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a] - page.customHeaders:  - {}
+[INFO  - 2017-12-13T03:43:14.981Z] Session [bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a] - CONSTRUCTOR - Desired Capabilities: {"platform":"ANY","browserName":"phantomjs","version":"","javascriptEnabled":true}
+[INFO  - 2017-12-13T03:43:14.981Z] Session [bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a] - CONSTRUCTOR - Negotiated Capabilities: {"browserName":"phantomjs","version":"1.9.2","driverName":"ghostdriver","driverVersion":"1.0.4","platform":"windows-XP-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2017-12-13T03:43:14.981Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a
+[ERROR - 2017-12-13T03:43:15.406Z] Session [bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a] - Page at 'https://item.taobao.com/item.htm?id=40116639349&ns=1&abbucket=0#detail' - Console Error (msg): TypeError: 'undefined' is not a function (evaluating 'f.bind(null,n)')
+[ERROR - 2017-12-13T03:43:15.407Z] Session [bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a] - Page at 'https://item.taobao.com/item.htm?id=40116639349&ns=1&abbucket=0#detail' - Console Error (stack): [
   {
     "file": "https://g.alicdn.com/??kissy/k/1.4.14/seed-min.js,sd/sufei/0.2.4/app/common/sufei-kissy.js,mtb/videox/0.1.33/videox-pc.js",
     "line": 106,
@@ -63,7 +63,7 @@ PhantomJS is launching GhostDriver...
     "function": ""
   }
 ]
-[ERROR - 2017-12-13T03:10:32.945Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - Page at 'https://item.taobao.com/item.htm?id=539867489371&ns=1&abbucket=0#detail' - Console Error (msg): ReferenceError: Can't find variable: Videox
+[ERROR - 2017-12-13T03:43:16.212Z] Session [bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a] - Page at 'https://item.taobao.com/item.htm?id=40116639349&ns=1&abbucket=0#detail' - Console Error (msg): ReferenceError: Can't find variable: Videox
     at https://g.alicdn.com/tb/item-detail/7.19.0/??index-min.js:3
     at https://g.alicdn.com/tb/item-detail/7.19.0/??index-min.js:3
     at https://g.alicdn.com/tb/item-detail/7.19.0/??index-min.js:3
@@ -92,6 +92,4 @@ PhantomJS is launching GhostDriver...
     at https://g.alicdn.com/??kissy/k/1.4.14/seed-min.js,sd/sufei/0.2.4/app/common/sufei-kissy.js,mtb/videox/0.1.33/videox-pc.js:12
     at https://g.alicdn.com/??kissy/k/1.4.14/seed-min.js,sd/sufei/0.2.4/app/common/sufei-kissy.js,mtb/videox/0.1.33/videox-pc.js:71
     at c (https://g.alicdn.com/??kissy/k/1.4.14/seed-min.js,sd/sufei/0.2.4/app/common/sufei-kissy.js,mtb/videox/0.1.33/videox-pc.js:70)
-[ERROR - 2017-12-13T03:10:32.945Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - Page at 'https://item.taobao.com/item.htm?id=539867489371&ns=1&abbucket=0#detail' - Console Error (stack): []
-[ERROR - 2017-12-13T03:10:34.099Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - Page at 'https://item.taobao.com/item.htm?id=539867489371&ns=1&abbucket=0#detail' - Console Error (msg): SyntaxError: Parse error
-[ERROR - 2017-12-13T03:10:34.099Z] Session [2dc95a00-dfb3-11e7-8917-6b42fecde6e3] - Page at 'https://item.taobao.com/item.htm?id=539867489371&ns=1&abbucket=0#detail' - Console Error (stack): []
+[ERROR - 2017-12-13T03:43:16.213Z] Session [bfe7faf0-dfb7-11e7-a2ed-7def5f4f177a] - Page at 'https://item.taobao.com/item.htm?id=40116639349&ns=1&abbucket=0#detail' - Console Error (stack): []

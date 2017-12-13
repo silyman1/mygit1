@@ -142,3 +142,13 @@ class TaobaoTshirt_Spider(Spider):
 #=all&ssid=s5-e&search_type=item&sourceId=tb.index&spm=a21bo.2017
 #.201856-taobao-item.1&ie=utf8&initiative_id=tbindexz_20170306&sort=sale-desc
 #&bcoffset=0&p4ppushleft=%2C44&s=44
+
+	
+		
+		
+
+#url = https://s.taobao.com/search?q=t%E6%81%A4&imgfile=&commend=all&ssid=s5-e&search_type=item&sourceId=tb.index&spm=a21bo.2017.201856-taobao-item.1&ie=utf8&initiative_id=tbindexz_20170306&sort=sale-desc&bcoffset=0&p4ppushleft=%2C44&ntoffset=6&s=0
+#https://s.taobao.com/search?q=t%E6%81%A4&imgfile=&commend
+#=all&ssid=s5-e&search_type=item&sourceId=tb.index&spm=a21bo.2017
+#.201856-taobao-item.1&ie=utf8&initiative_id=tbindexz_20170306&sort=sale-desc
+#&bcoffset=0&p4ppushleft=%2C44&s=44
