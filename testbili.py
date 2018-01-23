@@ -34,6 +34,7 @@ class Bilibili_Spider(object):
 				detail_url = detail.a['href']
 				print detail_url.encode('utf-8')
 				next_url = self.url + str(detail_url)
+				print next_url
 				#过滤一些不是我们所想要的连接
 				flag1 = re.search('bilibili',detail_url)
 				flag2 = re.search('bangumi',detail_url)
@@ -42,6 +43,7 @@ class Bilibili_Spider(object):
 				if flag1 and flag2:
 					print '此处无有用信息'
 					continue
+				next_url = 'https:'+next_url
 				print next_url
 				#获取每个详细类型内的有用信息
 				print '?????????'
@@ -51,11 +53,12 @@ class Bilibili_Spider(object):
 				service_args.append('--disk-cache=yes')  ##开启缓存
 				service_args.append('--ignore-ssl-errors=true') ##忽略https错误
 				service_args.append('--ssl-protocol=any')
-				browser=webdriver.PhantomJS(service_args=service_args)#PhantomJS
-				#browser = webdriver.Chrome()
+				#browser=webdriver.PhantomJS(service_args=service_args)#PhantomJS
+				browser = webdriver.Chrome(service_args=service_args)
 				browser.maximize_window()#窗口最大化，避免有时候selenium找不到元素的情况
 				print 'begin=================================second!!!!'
 				browser.get(next_url)
+				print 'dddd'
 				time.sleep(1)
 				#刷新页面，避免浮窗挡住我们所要的元素
 				browser.refresh()
@@ -121,9 +124,13 @@ class Bilibili_Spider(object):
 
 	def set_item(self,ranking,browser):
 		#详细类型`
-		detail_type = browser.find_element_by_xpath("//*[@class='info']/div[3]/span[2]/a").text
-		print detail_type
-		self.item['detail_type'] = detail_type
+		try:
+			detail_type = browser.find_element_by_xpath("//*[@class='info']/div[3]/span[2]/a").text
+			print detail_type
+			self.item['detail_type'] = detail_type
+		except:
+			self.error_num +=1
+			return
 		#类型`
 		type = browser.find_element_by_xpath("//*[@class='info']/div[3]/span[1]/a").text
 		print type
