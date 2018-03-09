@@ -16,28 +16,37 @@ sys.setdefaultencoding('utf8')
 
 class Bilibili_Spider(object):
 	video_num=0
+	referer = 'https://www.bilibili.com/'
 	lock = threading.Lock()
+	fu = open('total.log','w+')
+	sys.stdout = fu
 	__stdout__ = sys.stdout
 	headers = {
+		'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36',
+		'referer':referer,
+	}
+	header2 = {
 		'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36',
 	}
 	base_url = 'https://api.bilibili.com/x/web-interface/ranking/region?callback=jQuery17207618180920996875_1516760805670&jsonp=jsonp&rid=20&day=7&original=0&_=1516760817794'
 	predict_num = 200
 	type_list =[]
 	def get_types(self):
+		print 'get type'
 		url= 'https://www.bilibili.com/'
-		response = requests.get(url,headers=self.headers)
+		response = requests.get(url,headers=self.header2)
 		soup  =BeautifulSoup(response.text)
-		items = soup.find_all('li',class_='nav-item')
+		items = soup.find_all('li')
 		for item in items:
 			try:
 				type = item.find('div',attrs={'class':'nav-name'}).text
 				print type
-				detail_types =item.find_all('li',attrs={'class':'sub-nav-item'})
-				print detail_types
+				detail_types =item.find_all('ul',attrs={'class':'sub-nav'})
+				detail_types = detail_types[0].find_all("span")
 			except:
 				continue
 			detail_types=[i.text for i in detail_types]
+			print detail_types
 			if type and detail_types:
 				self.type_list.append((type,detail_types))
 		return

@@ -4,11 +4,16 @@ import sys
 import time
 import re
 import requests
+import threading
+import time 
 from bs4 import BeautifulSoup
 reload(sys)
 sys.setdefaultencoding('utf8')
 from selenium.webdriver.common.action_chains import ActionChains
+def mytime():
+	return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
 class Bilibili_Spider(object):
+	lock = threading.Lock()
 	item = {}
 	count = 0#对爬取的条目进行计数
 	error_num = 0#对发送错误的条目进行计数
@@ -31,98 +36,115 @@ class Bilibili_Spider(object):
 			details = result.find_all('li',attrs={'class':'sub-nav-item'})
 			#获取所有的type中的详细类型
 			for detail in details:
-				detail_url = detail.a['href']
-				print detail_url.encode('utf-8')
-				next_url = self.url + str(detail_url)
-				print next_url
-				#过滤一些不是我们所想要的连接
-				flag1 = re.search('bilibili',detail_url)
-				flag2 = re.search('bangumi',detail_url)
-				if flag1:
-					next_url = detail_url
-				if flag1 and flag2:
-					print '此处无有用信息'
-					continue
-				next_url = 'https:'+next_url
-				print next_url
-				#获取每个详细类型内的有用信息
-				print '?????????'
-				#设置浏览器参数
-				service_args=[]
-				service_args.append('--load-images=no')  ##关闭图片加载
-				service_args.append('--disk-cache=yes')  ##开启缓存
-				service_args.append('--ignore-ssl-errors=true') ##忽略https错误
-				service_args.append('--ssl-protocol=any')
-				#browser=webdriver.PhantomJS(service_args=service_args)#PhantomJS
-				browser = webdriver.Chrome(service_args=service_args)
-				browser.maximize_window()#窗口最大化，避免有时候selenium找不到元素的情况
-				print 'begin=================================second!!!!'
-				browser.get(next_url)
-				print 'dddd'
-				time.sleep(1)
-				#刷新页面，避免浮窗挡住我们所要的元素
-				browser.refresh()
-				time.sleep(3)
-				try:
-					target = browser.find_element_by_xpath("//*[@class='name']")
-					browser.execute_script("arguments[0].scrollIntoView();", target) #下拉浏览器时要获取的元素都呈现出来
-				except:
-					pass
-				
-				
-				#browser.save_screenshot('E:\\gitprojects\\scrapy\\1111.png')
-				#print browser.current_window_handle
-				
-				print 'complete=================================second!!!!'
-
-				videos = browser.find_elements_by_xpath("//*[@class='ri-title']")#获取热度排行榜的视频元素
-				#test_help =browser.find_element_by_xpath("//*[@class='name']")#此元素用来辅助，用于点击避免屏幕失去焦点
-				print videos
-				#print test_help
-				if videos is []:
-					return
-				#获取热度版排名前五的元素
-				for i in range(0,5):
-					self.count +=1
-					ranking = i + 1
-					#browser.save_screenshot('E:\\gitprojects\\scrapy\\1111.png')
-					try:
-						#test_help.click()
-						videos[i].click()
-					except:
-						print '出错了！！！'
-						self.error_num += 1#出错统计
-						continue
-					time.sleep(3)
-					now_handle = browser.current_window_handle #获取当前窗口句柄
-					print now_handle   #输出当前获取的窗口句柄
-					all_handles = browser.window_handles #获取所有窗口句柄
-					for handle in all_handles:
-						if handle != now_handle:
-							print handle, '输出待选择的窗口句柄'#输出待选择的窗口句柄
-							browser.switch_to_window(handle) #绑定
-					print browser.current_window_handle
-					#print browser.page_source
-					self.set_item(ranking,browser)
-					browser.close()
-					print now_handle
-					#切换回主窗口
-					browser.switch_to_window(now_handle)
-					#browser.refresh()
-					print 'ok'
-					time.sleep(1)
-					print 'creating self.item'
-					print self.item
-					print 'comleting one self.item ********************'
-
-				browser.quit()
-				print 'comlete one detail============================================'
+				#'''
+				i =0 
+				i = i+1
+				h = 't'+str(i)
+				h = threading.Thread(target=self.parse_detail,args=(detail,))
+				h.start()
+				#'''
+				#self.parse_detail(detail)
 			print 'comlete one type++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 		print 'comlete all types############################################'
 		print '总计数为',self.count
 		print '错误数为',self.error_num
+	def parse_detail(self,detail):
+		detail_url = detail.a['href']
+		print detail_url.encode('utf-8')
+		next_url = self.url + str(detail_url)
+		print next_url
+		#过滤一些不是我们所想要的连接
+		flag1 = re.search('bilibili',detail_url)
+		flag2 = re.search('bangumi',detail_url)
+		if flag1:
+			next_url = detail_url
+		if flag1 and flag2:
+			print '此处无有用信息'
+			return
+		next_url = 'https:'+next_url
+		print next_url
+		#获取每个详细类型内的有用信息
+		print '?????????'
+		#设置浏览器参数
+		service_args=[]
+		service_args.append('--load-images=no')  ##关闭图片加载
+		service_args.append('--disk-cache=yes')  ##开启缓存
+		service_args.append('--ignore-ssl-errors=true') ##忽略https错误
+		service_args.append('--ssl-protocol=any')
+		browser=webdriver.PhantomJS(service_args=service_args)#PhantomJS
+		#browser = webdriver.Chrome(service_args=service_args)
+		browser.maximize_window()#窗口最大化，避免有时候selenium找不到元素的情况
+		print 'begin=================================second!!!!'
+		browser.get(next_url)
+		print 'dddd'
+		time.sleep(1)
+		#刷新页面，避免浮窗挡住我们所要的元素
+		browser.refresh()
+		time.sleep(3)
+		try:
+			target = browser.find_element_by_xpath("//*[@class='name']")
+			browser.execute_script("arguments[0].scrollIntoView();", target) #下拉浏览器时要获取的元素都呈现出来
+		except:
+			pass
+		
+		
+		#browser.save_screenshot('E:\\gitprojects\\scrapy\\1111.png')
+		#print browser.current_window_handle
+		
+		print 'complete=================================second!!!!'
+
+		videos = browser.find_elements_by_xpath("//*[@class='ri-title']")#获取热度排行榜的视频元素
+		#test_help =browser.find_element_by_xpath("//*[@class='name']")#此元素用来辅助，用于点击避免屏幕失去焦点
+		print videos
+		#print test_help
+		if videos is []:
+			return
+		#获取热度版排名前五的元素
+		for i in range(0,5):
+			self.count +=1
+			ranking = i + 1
+			#browser.save_screenshot('E:\\gitprojects\\scrapy\\1111.png')
+			try:
+				#test_help.click()
+				videos[i].click()
+			except:
+				print '出错了！！！'
+				self.error_num += 1#出错统计
+				continue
+			time.sleep(3)
+			now_handle = browser.current_window_handle #获取当前窗口句柄
+			print now_handle   #输出当前获取的窗口句柄
+			all_handles = browser.window_handles #获取所有窗口句柄
+			for handle in all_handles:
+				if handle != now_handle:
+					print handle, '输出待选择的窗口句柄'#输出待选择的窗口句柄
+					browser.switch_to_window(handle) #绑定
+			print browser.current_window_handle
+			#print browser.page_source
+			self.set_item(ranking,browser)
+			browser.close()
+			print now_handle
+			#切换回主窗口
+			browser.switch_to_window(now_handle)
+			#browser.refresh()
+			print 'ok'
+			time.sleep(1)
+			print 'creating self.item'
+			print self.item
+			print 'comleting one self.item ********************'
+
+		browser.quit()
+		print 'comlete one detail============================================'
 
 	def set_item(self,ranking,browser):
+		#类型`
+		type = browser.find_element_by_xpath("//*[@class='info']/div[3]/span[1]/a").text
+		filename ='%s.txt'%type
+		lock = self.lock
+		if lock.acquire():
+			print '%s get lock %s\n'%(threading.currentThread().getName(),mytime())
+		fn = open(filename,'w')
+		sys.stdout = fo
 		#详细类型`
 		try:
 			detail_type = browser.find_element_by_xpath("//*[@class='info']/div[3]/span[2]/a").text
@@ -186,6 +208,10 @@ class Bilibili_Spider(object):
 		Submission_time = browser.find_element_by_xpath("//*[@itemprop='startDate']/i").text
 		print Submission_time
 		self.item['Submission_time'] = Submission_time
+		fu = open('detail.log','w')
+		sys.stdout = fu
+		print '%s release lock %s\n'%(threading.currentThread().getName(),mytime())
+		lock.release()
 	def begin(self):
 		response = self.start_requests()
 		self.parse(response)
