@@ -67,16 +67,14 @@ class Thread_Parser(threading.Thread):
 		global total_count
 		try:
 			soup =BeautifulSoup(item)
-			results = soup.find_all('div',attrs={"class":'article block untagged mb15'})
-			results = soup.find_all('div',attrs={"class":re.compile(r"article block untagged mb15")})
+			#results = soup.find_all('div',attrs={"class":'article block untagged mb15'})
+			results = soup.find_all('div',attrs={"id":re.compile(r"qiushi_tag_(\w+)")})
+			#results = soup.find_all('div',attrs={"class":re.compile(r"article block untagged mb15(\s)")})
 			print len(results)
 			try:
 				for result in results:
-					print '1a'
 					author = result.find("h2").text
-					print '1b'
 					content =result.find("div",attrs={"class":"content"})
-					print '1c'
 					content = content.find("span").text.split()
 					votes = result.find("span",attrs={"class":"stats-vote"}).text
 					comments =result.find("span",attrs={"class":"dash"}).text
@@ -86,7 +84,7 @@ class Thread_Parser(threading.Thread):
 									"comments":comments,}
 					#self.output_queue.put(output_item)
 					with self.lock:
-						self.output.write(json.dumps(output_item,ensure_ascii=False).encode('utf-8')+'\n')
+						self.output.write(json.dumps(output_item,ensure_ascii=False).encode('utf-8')+',\n')
 				with self.lock:
 					total_count += 1
 			except Exception,e:
