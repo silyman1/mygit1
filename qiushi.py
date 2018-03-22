@@ -73,11 +73,11 @@ class Thread_Parser(threading.Thread):
 			print len(results)
 			try:
 				for result in results:
-					author = result.find("h2").text
+					author = result.find("h2").text.replace('\n','')
 					content =result.find("div",attrs={"class":"content"})
-					content = content.find("span").text.split()
-					votes = result.find("span",attrs={"class":"stats-vote"}).text
-					comments =result.find("span",attrs={"class":"dash"}).text
+					content = (content.find("span").text.split())[0].replace('\n','').replace('"',"'")
+					votes = (result.find("span",attrs={"class":"stats-vote"})).find('i').text
+					comments =(result.find("span",attrs={"class":"stats-comments"})).find('i').text
 					output_item = {"author":author,
 									"content":content,
 									"votes":votes,
